@@ -513,84 +513,6 @@ The connector is installed under:
 
 ---
 
-# 🧪 Execution Verification
-
-The pipeline was successfully tested end-to-end.
-
-## Kafka Verification
-
-Kafka received the streamed events on:
-
-```text
-ecommerce_events
-```
-
-The producer successfully completed:
-
-```text
-Finished sending all events.
-```
-
-## Flink Source Verification
-
-The Flink Web UI showed:
-
-```text
-Records Received: 100,000
-```
-
-This confirms that Flink consumed the complete 100k-event sample from Kafka.
-
-## Aggregation Verification
-
-The Flink job contained the aggregation stage:
-
-```text
-GlobalWindowAggregate
-```
-
-and produced aggregated records for:
-
-```text
-brand_window_sales
-```
-
-## Sink Verification
-
-TaskManager logs showed real aggregated output such as:
-
-```text
-+I[2019-11-16T12:20, 2019-11-16T12:25, givenchy, 1, 120.98, 120.98, 1]
-```
-
-Therefore the complete flow was successfully verified:
-
-```text
-CSV
- ↓
-Python Producer
- ↓
-Kafka
- ↓
-Flink Kafka Source
- ↓
-Event Time
- ↓
-5-Second Watermark
- ↓
-5-Minute Tumbling Window
- ↓
-Purchase Filter
- ↓
-Brand Aggregation
- ↓
-brand_window_sales
- ↓
-Print Sink
-```
-
----
-
 # 🖥️ Flink Web UI
 
 Once the project is running, open:
@@ -797,81 +719,10 @@ To remove containers, networks, and the local environment created by Compose.
 
 ---
 
-# 📌 Notes
-
-### Why Kafka?
-
-Kafka acts as the streaming broker between the producer and Flink. This separates event generation from stream processing and provides a realistic event-streaming architecture.
-
-### Why Flink?
-
-Flink is used for stateful stream processing and event-time windowing. It allows the project to process continuously arriving events rather than treating the dataset as a traditional batch-only workload.
-
-### Why Event Time?
-
-The business analysis is based on **when an event actually happened**, rather than when the event reached the processing system.
-
-### Why a Watermark?
-
-Events may arrive out of order. The watermark provides Flink with a mechanism for progressing event time while allowing a bounded amount of lateness.
-
-### Why Tumbling Windows?
-
-The task requires non-overlapping five-minute windows, making tumbling windows a direct fit for the requested business aggregation.
-
----
-
-# 📋 Project Deliverables
-
-The project provides:
-
-- [x] Flink SQL source table
-- [x] Event-time timestamp conversion
-- [x] 5-second watermark
-- [x] 5-minute tumbling window
-- [x] Purchase filtering
-- [x] Brand-level aggregation
-- [x] Total orders
-- [x] Gross revenue
-- [x] Average order value
-- [x] Unique buyers
-- [x] `brand_window_sales` sink
-- [x] Dockerized Kafka and Flink environment
-- [x] Python Kafka producer
-- [x] Executable Flink SQL script
-- [x] Flink Web UI verification
-- [x] TaskManager sink-output verification
-
----
-
-# 👨‍💻 Reproduce the Project Yourself
-
-If you want to try the project on your own machine:
-
-### Requirements
-
-```text
-Docker Desktop
-Git
-```
-
-That's it.
-
-You do **not** need to install locally:
-
-```text
-Apache Kafka
-Apache Flink
-Python
-Java
-```
-
-because the project runs these components through Docker.
-
 ### Quick Start
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone <https://github.com/YoussefKh117/Ecommerce_Cart_Streaming_Pipeline.git>
 cd CartStreamAnalysis
 
 docker compose up -d --build kafka flink-jobmanager flink-taskmanager
@@ -915,31 +766,5 @@ docker logs cartstream-flink-taskmanager --tail 50
 ```
 
 ---
-
-# ⭐ Summary
-
-**CartStreamAnalysis** demonstrates a complete real-time Big Data pipeline:
-
-```text
-E-Commerce Dataset
-        ↓
-Python Kafka Producer
-        ↓
-Apache Kafka
-        ↓
-Apache Flink SQL
-        ↓
-Event-Time Processing
-        ↓
-5-Second Watermark
-        ↓
-5-Minute Tumbling Windows
-        ↓
-Purchase Analytics
-        ↓
-Brand-Level Business Metrics
-        ↓
-brand_window_sales
-```
 
 The project demonstrates practical stream-processing concepts including **Kafka ingestion, event time, watermarks, windowing, streaming SQL, aggregations, Dockerized infrastructure, and execution monitoring**.
